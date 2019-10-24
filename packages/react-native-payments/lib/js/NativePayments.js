@@ -7,6 +7,21 @@ const { ReactNativePayments } = NativeModules;
 
 const IS_ANDROID = Platform.OS === 'android';
 
+// https://developers.google.com/pay/api/#participating-google-pay-processors
+const androidSupportedGateways = [
+  'adyen',
+  'braintree',
+  'cloudpayments',
+  'ebanx',
+  'firstdata',
+  'imsolutions',
+  'paysafe',
+  'payture',
+  'stripe',
+  'vantiv',
+  'worldpay',
+];
+
 const NativePayments: {
   canMakePayments: boolean,
   supportedGateways: Array<string>,
@@ -18,8 +33,8 @@ const NativePayments: {
   getFullWalletAndroid: string => Promise<any>
 } = {
   supportedGateways: IS_ANDROID
-    ? ['stripe', 'braintree'] // On Android, Payment Gateways are supported out of the gate.
-    : ReactNativePayments ? ReactNativePayments.supportedGateways : [],
+    ? androidSupportedGateways // On Android, Payment Gateways are supported out of the gate.
+    : ReactNativePayments.supportedGateways,
 
   canMakePayments(methodData: object) {
     return new Promise((resolve, reject) => {
